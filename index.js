@@ -11,49 +11,61 @@ const fs = require('jest');
 const { getSystemErrorName } = require('util');
 
 class Employee {
-    constructor(name, id, email) {
-      this.name = name;
-      this.id = id;
-      this.email = email;
-      getName() {
-        return this.name;
-      }
-      getId() {
-        return this.id;
-      }
-      getEmail() {
-        return this.email;
-      }
-      getRole() {
-        return `"Employee"`;
-      }
-    }
+  constructor(name, id, email) {
+    this.name = name;
+    this.id = id;
+    this.email = email;
+  }
+  getName() {
+    return this.name;
+  }
+  getId() {
+    return this.id;
+  }
+  getEmail() {
+    return this.email;
+  }
+  getRole() {
+    return `"Employee"`;
+  }
 }
 
-class Manager extends Employee() {
+class Manager extends Employee(name, id, email, officeNumber) {
   constructor(officeNumber) {
+    super(name, id, email);
     this.officeNumber = officeNumber;
   }
   get officeNumber() {
     return this.officeNumber;
   }
+  getRole() {
+    return `"Manager"`;
+  }
 }
 
-class Engineer extends Employee() {
+class Engineer extends Employee(name, id, email, github) {
   constructor(github) {
     this.github = github;
+    super(name, id, email);
   }
   getGithub() {
     return this.github;
   }
+  getRole() {
+    return `"Engineer"`;
+  }
 }
   
-class Intern extends Employee() {
+class Intern extends Employee(name, id, email, school) {
   constructor(school) {
+    super(name, id, email);
     this.school = school;
   }
   getSchool() {
     return this.school;
+  }
+  getRole() {
+    return `"Intern"`;
   }
 }
   
