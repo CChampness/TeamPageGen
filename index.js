@@ -3,7 +3,7 @@
 // To use the app in bash, thye node index.js
 // To install the app, first npm install the inquirer package
 // The README file that is created will be in mardown format and is based on
-//  the Professional README Guide at (https://coding-boot-camp.github.io/full-stack/github/professional-readme-guide)
+// the Professional README Guide at (https://coding-boot-camp.github.io/full-stack/github/professional-readme-guide)
 
 const inquirer = require('inquirer');
 const fs = require('fs');
@@ -70,30 +70,64 @@ class Intern extends Employee(name, id, email, school) {
 }
   
   // Array of questions for user input
-const questions = [
-    {
-      type: 'input',
-      name: 'emp-name',
-      message: 'What is the employee\'s name?',
-    },
+const employeeQuestions = [
+  {
+    type: 'input',
+    name: 'emp-name',
+    message: 'What is the employee\'s name?',
+  },
+  {
+    type: 'input',
+    name: 'id',
+    message: 'What is the employee\'s id?',
+  },
+  {
+    type: 'input',
+    name: 'email',
+    message: 'What is the employee\'s email?',
+  },
 ]
-  
+
+const managerQuestions = [
+  {
+    type: 'input',
+    name: 'officeNumber',
+    message: 'What is the employee\'s office number?',
+  },
+]
+
+const engineerQuestions = [
+  {
+    type: 'input',
+    name: 'gethub',
+    message: 'What is the employee\'s github?',
+  },
+]
+
+const internQuestions = [
+  {
+    type: 'input',
+    name: 'school',
+    message: 'What is the employee\'s school?',
+  },
+]
 
 
-// Write README file
+// Write HTML file
 function writeToFile(fileName, answers) {
     fs.writeFile(fileName, generateHTML(answers), (err) =>
       err ? console.log(err) : console.log('Success!'));
   }
   
-  // Initialize app
-  function init() {
-    inquirer
-    .prompt(questions)
-    .then((data) => {
-      const filename = "./dist/index.html";
-      writeToFile(filename, data);
-    });
-  }
+// Initialize app
+function init() {
+  inquirer
+  .prompt(questions)
+  .then((data) => {
+    const filename = "./dist/index.html";
+//    writeToFile(filename, data);
+    console.log(data);
+  });
+}
   
-  init();
+init();
