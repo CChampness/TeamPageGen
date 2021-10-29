@@ -1,14 +1,14 @@
-// This is a command-line application to create a README file.
-// Collect user input for the available sections of the README file
-// To use the app in bash, thye node index.js
+// This is a command-line application to create an HTML page.
+// The page will be a team profile for a software team.
+// Collect user input for the team members.
+// To use the app in bash, type node index.js
 // To install the app, first npm install the inquirer package
-// The README file that is created will be in mardown format and is based on
-// the Professional README Guide at (https://coding-boot-camp.github.io/full-stack/github/professional-readme-guide)
+// The jest package is used for testing.
 
 const inquirer = require('inquirer');
 const fs = require('fs');
-const fs = require('jest');
-const { getSystemErrorName } = require('util');
+// const jest = require('jest');
+// const { getSystemErrorName } = require('util');
 
 class Employee {
   constructor(name, id, email) {
@@ -30,12 +30,12 @@ class Employee {
   }
 }
 
-class Manager extends Employee(name, id, email, officeNumber) {
-  constructor(officeNumber) {
+class Manager extends Employee {
+  constructor(name, id, email, officeNumber) {
     super(name, id, email);
     this.officeNumber = officeNumber;
   }
-  get officeNumber() {
+  getOfficeNumber() {
     return this.officeNumber;
   }
   getRole() {
@@ -43,8 +43,8 @@ class Manager extends Employee(name, id, email, officeNumber) {
   }
 }
 
-class Engineer extends Employee(name, id, email, github) {
-  constructor(github) {
+class Engineer extends Employee {
+  constructor(name, id, email, github) {
     this.github = github;
     super(name, id, email);
   }
@@ -56,8 +56,8 @@ class Engineer extends Employee(name, id, email, github) {
   }
 }
   
-class Intern extends Employee(name, id, email, school) {
-  constructor(school) {
+class Intern extends Employee {
+  constructor(name, id, email, school) {
     super(name, id, email);
     this.school = school;
   }
@@ -114,20 +114,150 @@ const internQuestions = [
 
 
 // Write HTML file
-function writeToFile(fileName, answers) {
-    fs.writeFile(fileName, generateHTML(answers), (err) =>
-      err ? console.log(err) : console.log('Success!'));
-  }
-  
-// Initialize app
-function init() {
+function writeHTML(fileName, answers) {
+  fs.writeFile(fileName, answers, (err) =>
+    err ? console.log(err) : console.log('Success!'));
+}
+
+function getEmployeeProfile() {
   inquirer
-  .prompt(questions)
+  .prompt(employeeQuestions)
+  .then((data) => {
+    const filename = "./dist/index.html";
+//    appendFile(filename, data);
+    console.log(data);
+  });
+}
+
+function getProfile(questionSet) {
+
+}
+
+function getManagerProfile() {
+  inquirer
+  .prompt(employeeQuestions)
   .then((data) => {
     const filename = "./dist/index.html";
 //    writeToFile(filename, data);
     console.log(data);
   });
+  getEmployeeProfile();
 }
-  
-init();
+
+function engineerProfile() {
+  getEmployeeProfile();
+}
+
+function internProfile() {
+  getEmployeeProfile();
+}
+
+function init() {
+  getManagerProfile();
+  while(moreEmployees) {
+    if(employeeType === 'Engineer') {
+        getEngineerProfile();
+    } else {
+        getInternProfile();
+    }
+  }
+}
+
+const menuQuestion = [
+  {
+    type: 'list',
+    message: 'Which employee would you like to add next (or finish)?',
+    name: 'empType',
+    choices: ['Manager', 'Engineer', 'Intern', '[Finish]'],
+  },
+]
+
+function menu(notDone) {
+  while(notDone) {
+  inquirer
+  .prompt(menuQuestion)
+  .then((data) => {
+    console.log(data);
+    switch (data) {
+      case "Manager":
+        getManagerProfile();
+        break;
+      case "Engineer":
+        getEngineerProfile();
+        break;
+      case "Intern":
+        getInternProfile();
+        break;
+      case "Finish":
+        notDone = false;
+        break;
+    }
+  });
+ }
+}
+
+// // Initialize app
+// function init() {
+//   inquirer
+//   .prompt(managerQuestions)
+//   .then((data) => {
+//     const filename = "./dist/index.html";
+//    writeHTML(filename, data.officeNumber);
+//     console.log(data);
+//   });
+// }
+
+/*
+const collectInputs = async (inputs = []) => {
+  const prompts = [
+    {
+      type: 'input',
+      name: 'inputValue',
+      message: 'Enter some input: '
+    },
+    {
+      type: 'confirm',
+      name: 'again',
+      message: 'Enter another input? ',
+      default: true
+    }
+  ];
+
+  const { again, ...answers } = await inquirer.prompt(prompts);
+  const newInputs = [...inputs, answers];
+  return again ? collectInputs(newInputs) : newInputs;
+};
+
+const main = async () => {
+  const inputs = await collectInputs();
+  console.log(inputs);
+};
+*/
+
+const collectInputs = async (inputs = []) => {
+  const menuQuestions = [
+    {
+      type: 'list',
+      message: 'Which employee would you like to add next?',
+      name: 'empType',
+      choices: ['Manager', 'Engineer', 'Intern'],
+    },
+    {
+      type: 'confirm',
+      name: 'again',
+      message: 'Enter another employee? ',
+      default: true
+    }
+  ];
+
+  const { again, ...answers } = await inquirer.prompt(menuQuestions);
+  const newInputs = [...inputs, answers];
+  return again ? collectInputs(newInputs) : newInputs;
+};
+
+const main = async () => {
+  const inputs = await collectInputs();
+  console.log(inputs);
+};
+
+main();
