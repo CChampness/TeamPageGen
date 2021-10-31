@@ -10,6 +10,10 @@ const fs = require('fs');
 // const jest = require('jest');
 // const { getSystemErrorName } = require('util');
 
+// Collect all of the member of the team
+const team = [];
+
+// Generic class that all employee types inherit from
 class Employee {
   constructor(name, id, email) {
     this.name = name;
@@ -26,7 +30,7 @@ class Employee {
     return this.email;
   }
   getRole() {
-    return `"Employee"`;
+    return "Employee";
   }
 }
 
@@ -34,25 +38,27 @@ class Manager extends Employee {
   constructor(name, id, email, officeNumber) {
     super(name, id, email);
     this.officeNumber = officeNumber;
+    console.log("new Manager,"+this.name);
   }
   getOfficeNumber() {
     return this.officeNumber;
   }
   getRole() {
-    return `"Manager"`;
+    console.log("MANAGER!");
+    return "Manager";
   }
 }
 
 class Engineer extends Employee {
   constructor(name, id, email, github) {
-    this.github = github;
     super(name, id, email);
+    this.github = github;
   }
   getGithub() {
     return this.github;
   }
   getRole() {
-    return `"Engineer"`;
+    return "Engineer";
   }
 }
   
@@ -65,7 +71,7 @@ class Intern extends Employee {
     return this.school;
   }
   getRole() {
-    return `"Intern"`;
+    return "Intern";
   }
 }
   
@@ -74,7 +80,7 @@ class Intern extends Employee {
 const employeeQuestions = [
   {
     type: 'input',
-    name: 'emp-name',
+    name: 'empname',
     message: 'What is this employee\'s name?',
   },
   {
@@ -94,101 +100,11 @@ const employeeQuestions = [
   }
 ]
 
-// const managerQuestions = [
-//   {
-//     type: 'input',
-//     name: 'officeNumber',
-//     message: 'What is the employee\'s office number?',
-//   },
-// ]
-
-// const engineerQuestions = [
-//   {
-//     type: 'input',
-//     name: 'gethub',
-//     message: 'What is this employee\'s github?',
-//   },
-// ]
-
-// const internQuestions = [
-//   {
-//     type: 'input',
-//     name: 'school',
-//     message: 'What is this employee\'s school?',
-//   },
-// ]
-
-
 // Write HTML file
 function writeHTML(fileName, answers) {
   fs.writeFile(fileName, answers, (err) =>
     err ? console.log(err) : console.log('Success!'));
 }
-
-// function getEmployeeProfile() {
-//   inquirer
-//   .prompt(employeeQuestions)
-//   .then((data) => {
-//     const filename = "./dist/index.html";
-// //    appendFile(filename, data);
-//     console.log("Employee: "+data);
-//   });
-// }
-
-// function getProfile(questionSet) {
-// }
-
-// function engineerProfile() {
-//   getEmployeeProfile();
-// }
-
-// function internProfile() {
-//   getEmployeeProfile();
-// }
-
-// function init() {
-//   getManagerProfile();
-//   while(moreEmployees) {
-//     if(employeeType === 'Engineer') {
-//         getEngineerProfile();
-//     } else {
-//         getInternProfile();
-//     }
-//   }
-// }
-
-// const menuQuestion = [
-//   {
-//     type: 'list',
-//     message: 'Which employee would you like to add next (or finish)?',
-//     name: 'empType',
-//     choices: ['Manager', 'Engineer', 'Intern'],
-//   },
-// ]
-
-// function menu(notDone) {
-//   while(notDone) {
-//   inquirer
-//   .prompt(menuQuestion)
-//   .then((data) => {
-//     console.log("data: "+data);
-//     switch (data) {
-//       case "Manager":
-//         getManagerProfile();
-//         break;
-//       case "Engineer":
-//         getEngineerProfile();
-//         break;
-//       case "Intern":
-//         getInternProfile();
-//         break;
-//       case "Finish":
-//         notDone = false;
-//         break;
-//     }
-//   });
-//  }
-// }
 
 const internQuestion = [
   {
@@ -208,8 +124,11 @@ const internInputs = async (intInputs = []) => {
 const getInternProfile = async () => {
   const intInputs = await internInputs();
   console.log("getInternProfile: "+JSON.stringify(intInputs));
+  team.push(new Intern(intInputs[0].empname, intInputs[0].id, intInputs[0].email, intInputs[0].school));
   if (intInputs[0].more.toUpperCase() === "Y") {
     mainMenu();
+  } else {
+    processTeam();
   }
 };
 
@@ -231,11 +150,13 @@ const engineerInputs = async (engInputs = []) => {
 const getEngineerProfile = async () => {
   const engInputs = await engineerInputs();
   console.log("getEngineerProfile: "+JSON.stringify(engInputs));
+  team.push(new Engineer(engInputs[0].empname, engInputs[0].id, engInputs[0].email, engInputs[0].github));
   if (engInputs[0].more.toUpperCase() === "Y") {
     mainMenu();
+  } else {
+    processTeam();
   }
 };
-
 
 const managerQuestion = [
   {
@@ -255,12 +176,14 @@ const managerInputs = async (mgrInputs = []) => {
 const getManagerProfile = async () => {
   const mgrInputs = await managerInputs();
   console.log("getManagerProfile: "+JSON.stringify(mgrInputs));
+  console.log("manager's name: "+mgrInputs[0].empname);
+  team.push(new Manager(mgrInputs[0].empname, mgrInputs[0].id, mgrInputs[0].email, mgrInputs[0].officeNumber));
   if (mgrInputs[0].more.toUpperCase() === "Y") {
     mainMenu();
+  } else {
+    processTeam();
   }
 };
-
-let getMore = true;
 
 const menuInputs = async (inputs = []) => {
   const menuQuestions = [
@@ -274,12 +197,10 @@ const menuInputs = async (inputs = []) => {
 
   const { more, ...answers } = await inquirer.prompt(menuQuestions);
   const newInputs = [...inputs, answers];
-  getMore = more;
   return more ? menuInputs(newInputs) : newInputs;
 };
 
 const mainMenu = async () => {
-  getMore = false;
   const inputs = await menuInputs();
   switch (inputs[0].empType) {
     case "Manager": 
@@ -294,4 +215,11 @@ const mainMenu = async () => {
   }
 };
 
+function processTeam() {
+  console.log("processTeam");
+  team.forEach(member => console.log(member.getRole()));
+}
+
 mainMenu();
+// console.log("After mainMenu");
+// processTeam();
