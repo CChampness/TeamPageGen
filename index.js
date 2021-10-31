@@ -69,48 +69,54 @@ class Intern extends Employee {
   }
 }
   
-  // Array of questions for user input
+// Array of questions for user input
+// Common to all employee types
 const employeeQuestions = [
   {
     type: 'input',
     name: 'emp-name',
-    message: 'What is the employee\'s name?',
+    message: 'What is this employee\'s name?',
   },
   {
     type: 'input',
     name: 'id',
-    message: 'What is the employee\'s id?',
+    message: 'What is this employee\'s id?',
   },
   {
     type: 'input',
     name: 'email',
-    message: 'What is the employee\'s email?',
+    message: 'What is this employee\'s email?',
   },
-]
-
-const managerQuestions = [
   {
     type: 'input',
-    name: 'officeNumber',
-    message: 'What is the employee\'s office number?',
-  },
+    name: 'more',
+    message: 'Enter another employee? (y/n)',
+  }
 ]
 
-const engineerQuestions = [
-  {
-    type: 'input',
-    name: 'gethub',
-    message: 'What is the employee\'s github?',
-  },
-]
+// const managerQuestions = [
+//   {
+//     type: 'input',
+//     name: 'officeNumber',
+//     message: 'What is the employee\'s office number?',
+//   },
+// ]
 
-const internQuestions = [
-  {
-    type: 'input',
-    name: 'school',
-    message: 'What is the employee\'s school?',
-  },
-]
+// const engineerQuestions = [
+//   {
+//     type: 'input',
+//     name: 'gethub',
+//     message: 'What is this employee\'s github?',
+//   },
+// ]
+
+// const internQuestions = [
+//   {
+//     type: 'input',
+//     name: 'school',
+//     message: 'What is this employee\'s school?',
+//   },
+// ]
 
 
 // Write HTML file
@@ -119,122 +125,144 @@ function writeHTML(fileName, answers) {
     err ? console.log(err) : console.log('Success!'));
 }
 
-function getEmployeeProfile() {
-  inquirer
-  .prompt(employeeQuestions)
-  .then((data) => {
-    const filename = "./dist/index.html";
-//    appendFile(filename, data);
-    console.log(data);
-  });
-}
-
-function getProfile(questionSet) {
-
-}
-
-function getManagerProfile() {
-  inquirer
-  .prompt(employeeQuestions)
-  .then((data) => {
-    const filename = "./dist/index.html";
-//    writeToFile(filename, data);
-    console.log(data);
-  });
-  getEmployeeProfile();
-}
-
-function engineerProfile() {
-  getEmployeeProfile();
-}
-
-function internProfile() {
-  getEmployeeProfile();
-}
-
-function init() {
-  getManagerProfile();
-  while(moreEmployees) {
-    if(employeeType === 'Engineer') {
-        getEngineerProfile();
-    } else {
-        getInternProfile();
-    }
-  }
-}
-
-const menuQuestion = [
-  {
-    type: 'list',
-    message: 'Which employee would you like to add next (or finish)?',
-    name: 'empType',
-    choices: ['Manager', 'Engineer', 'Intern', '[Finish]'],
-  },
-]
-
-function menu(notDone) {
-  while(notDone) {
-  inquirer
-  .prompt(menuQuestion)
-  .then((data) => {
-    console.log(data);
-    switch (data) {
-      case "Manager":
-        getManagerProfile();
-        break;
-      case "Engineer":
-        getEngineerProfile();
-        break;
-      case "Intern":
-        getInternProfile();
-        break;
-      case "Finish":
-        notDone = false;
-        break;
-    }
-  });
- }
-}
-
-// // Initialize app
-// function init() {
+// function getEmployeeProfile() {
 //   inquirer
-//   .prompt(managerQuestions)
+//   .prompt(employeeQuestions)
 //   .then((data) => {
 //     const filename = "./dist/index.html";
-//    writeHTML(filename, data.officeNumber);
-//     console.log(data);
+// //    appendFile(filename, data);
+//     console.log("Employee: "+data);
 //   });
 // }
 
-/*
-const collectInputs = async (inputs = []) => {
-  const prompts = [
-    {
-      type: 'input',
-      name: 'inputValue',
-      message: 'Enter some input: '
-    },
-    {
-      type: 'confirm',
-      name: 'again',
-      message: 'Enter another input? ',
-      default: true
-    }
-  ];
+// function getProfile(questionSet) {
+// }
 
-  const { again, ...answers } = await inquirer.prompt(prompts);
-  const newInputs = [...inputs, answers];
-  return again ? collectInputs(newInputs) : newInputs;
+// function engineerProfile() {
+//   getEmployeeProfile();
+// }
+
+// function internProfile() {
+//   getEmployeeProfile();
+// }
+
+// function init() {
+//   getManagerProfile();
+//   while(moreEmployees) {
+//     if(employeeType === 'Engineer') {
+//         getEngineerProfile();
+//     } else {
+//         getInternProfile();
+//     }
+//   }
+// }
+
+// const menuQuestion = [
+//   {
+//     type: 'list',
+//     message: 'Which employee would you like to add next (or finish)?',
+//     name: 'empType',
+//     choices: ['Manager', 'Engineer', 'Intern'],
+//   },
+// ]
+
+// function menu(notDone) {
+//   while(notDone) {
+//   inquirer
+//   .prompt(menuQuestion)
+//   .then((data) => {
+//     console.log("data: "+data);
+//     switch (data) {
+//       case "Manager":
+//         getManagerProfile();
+//         break;
+//       case "Engineer":
+//         getEngineerProfile();
+//         break;
+//       case "Intern":
+//         getInternProfile();
+//         break;
+//       case "Finish":
+//         notDone = false;
+//         break;
+//     }
+//   });
+//  }
+// }
+
+const internQuestion = [
+  {
+    type: 'input',
+    name: 'school',
+    message: 'What is this intern\'s school?',
+  },
+]
+
+const internInputs = async (intInputs = []) => {
+  const internQuestions = [ ...internQuestion, ...employeeQuestions  ];
+  const { ...intAnswers } = await inquirer.prompt(internQuestions);
+  const newIntInputs = [...intInputs, intAnswers];
+  return newIntInputs;
 };
 
-const main = async () => {
-  const inputs = await collectInputs();
-  console.log(inputs);
+const getInternProfile = async () => {
+  const intInputs = await internInputs();
+  console.log("getInternProfile: "+JSON.stringify(intInputs));
+  if (intInputs[0].more.toUpperCase() === "Y") {
+    mainMenu();
+  }
 };
-*/
 
-const collectInputs = async (inputs = []) => {
+const engineerQuestion = [
+  {
+    type: 'input',
+    name: 'github',
+    message: 'What is this engineer\'s github?',
+  },
+];
+
+const engineerInputs = async (engInputs = []) => {
+  const engineerQuestions = [ ...engineerQuestion, ...employeeQuestions  ];
+  const { ...engAnswers } = await inquirer.prompt(engineerQuestions);
+  const newEngInputs = [...engInputs, engAnswers];
+  return newEngInputs;
+};
+
+const getEngineerProfile = async () => {
+  const engInputs = await engineerInputs();
+  console.log("getEngineerProfile: "+JSON.stringify(engInputs));
+  if (engInputs[0].more.toUpperCase() === "Y") {
+    mainMenu();
+  }
+};
+
+
+const managerQuestion = [
+  {
+    type: 'input',
+    name: 'officeNumber',
+    message: 'What is this manager\'s office number?',
+  },
+];
+
+const managerInputs = async (mgrInputs = []) => {
+  const managerQuestions = [ ...managerQuestion, ...employeeQuestions ];
+  const { ...mgrAnswers } = await inquirer.prompt(managerQuestions);
+  const newMgrInputs = [...mgrInputs, mgrAnswers];
+  return newMgrInputs;
+};
+
+const getManagerProfile = async () => {
+  const mgrInputs = await managerInputs();
+  console.log("getManagerProfile: "+JSON.stringify(mgrInputs));
+  if (mgrInputs[0].more.toUpperCase() === "Y") {
+    mainMenu();
+  }
+};
+
+let getMore = true;
+
+const menuInputs = async (inputs = []) => {
   const menuQuestions = [
     {
       type: 'list',
@@ -242,22 +270,28 @@ const collectInputs = async (inputs = []) => {
       name: 'empType',
       choices: ['Manager', 'Engineer', 'Intern'],
     },
-    {
-      type: 'confirm',
-      name: 'again',
-      message: 'Enter another employee? ',
-      default: true
-    }
   ];
 
-  const { again, ...answers } = await inquirer.prompt(menuQuestions);
+  const { more, ...answers } = await inquirer.prompt(menuQuestions);
   const newInputs = [...inputs, answers];
-  return again ? collectInputs(newInputs) : newInputs;
+  getMore = more;
+  return more ? menuInputs(newInputs) : newInputs;
 };
 
-const main = async () => {
-  const inputs = await collectInputs();
-  console.log(inputs);
+const mainMenu = async () => {
+  getMore = false;
+  const inputs = await menuInputs();
+  switch (inputs[0].empType) {
+    case "Manager": 
+      getManagerProfile();
+    break;
+    case "Engineer":
+      getEngineerProfile();
+    break;
+    case "Intern":
+      getInternProfile();
+    break;
+  }
 };
 
-main();
+mainMenu();
