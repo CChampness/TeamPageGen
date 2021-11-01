@@ -38,13 +38,12 @@ class Manager extends Employee {
   constructor(name, id, email, officeNumber) {
     super(name, id, email);
     this.officeNumber = officeNumber;
-    console.log("new Manager,"+this.name);
+    // console.log("new Manager,"+this.name);
   }
   getOfficeNumber() {
     return this.officeNumber;
   }
   getRole() {
-    console.log("MANAGER!");
     return "Manager";
   }
 }
@@ -101,21 +100,20 @@ const employeeQuestions = [
 ]
 
 // Write HTML file
-function writeHTML(fileName, answers) {
-  fs.writeFile(fileName, answers, (err) =>
-    err ? console.log(err) : console.log('Success!'));
+function writeHTML(answers) {
+  const part1File = "./src/html1.html";
+  const part2File = "./src/html2.html";
+  const htmlFile = "index.html";
+  fs.writeFile(htmlFile, answers, (err) =>
+    err ? console.log(err) : console.log(htmlFile+' has been written.'));
 }
 
-const internQuestion = [
-  {
+const internInputs = async (intInputs = []) => {
+  const internQuestions = [{
     type: 'input',
     name: 'school',
     message: 'What is this intern\'s school?',
-  },
-]
-
-const internInputs = async (intInputs = []) => {
-  const internQuestions = [ ...internQuestion, ...employeeQuestions  ];
+  }, ...employeeQuestions  ];
   const { ...intAnswers } = await inquirer.prompt(internQuestions);
   const newIntInputs = [...intInputs, intAnswers];
   return newIntInputs;
@@ -132,16 +130,12 @@ const getInternProfile = async () => {
   }
 };
 
-const engineerQuestion = [
-  {
+const engineerInputs = async (engInputs = []) => {
+  const engineerQuestions = [{
     type: 'input',
     name: 'github',
     message: 'What is this engineer\'s github?',
-  },
-];
-
-const engineerInputs = async (engInputs = []) => {
-  const engineerQuestions = [ ...engineerQuestion, ...employeeQuestions  ];
+  }, ...employeeQuestions  ];
   const { ...engAnswers } = await inquirer.prompt(engineerQuestions);
   const newEngInputs = [...engInputs, engAnswers];
   return newEngInputs;
@@ -158,16 +152,12 @@ const getEngineerProfile = async () => {
   }
 };
 
-const managerQuestion = [
-  {
+const managerInputs = async (mgrInputs = []) => {
+  const managerQuestions = [   {
     type: 'input',
     name: 'officeNumber',
-    message: 'What is this manager\'s office number?',
-  },
-];
-
-const managerInputs = async (mgrInputs = []) => {
-  const managerQuestions = [ ...managerQuestion, ...employeeQuestions ];
+    message: 'What is the manager\'s office number?',
+  }, ...employeeQuestions ];
   const { ...mgrAnswers } = await inquirer.prompt(managerQuestions);
   const newMgrInputs = [...mgrInputs, mgrAnswers];
   return newMgrInputs;
@@ -176,7 +166,7 @@ const managerInputs = async (mgrInputs = []) => {
 const getManagerProfile = async () => {
   const mgrInputs = await managerInputs();
   console.log("getManagerProfile: "+JSON.stringify(mgrInputs));
-  console.log("manager's name: "+mgrInputs[0].empname);
+  // console.log("manager's name: "+mgrInputs[0].empname);
   team.push(new Manager(mgrInputs[0].empname, mgrInputs[0].id, mgrInputs[0].email, mgrInputs[0].officeNumber));
   if (mgrInputs[0].more.toUpperCase() === "Y") {
     mainMenu();
@@ -215,11 +205,70 @@ const mainMenu = async () => {
   }
 };
 
+function memberHtml(member) {
+  console.log("memberHtml");
+  let html = "";
+  team.forEach(member => {
+    const role = member.getRole();
+    // htmlStr += role;
+    html += `
+    <section class="proj-card">
+      <p>Name: ${member.getName()}</p>
+      <p>Id: ${member.getId()}</p>
+      <p>email: ${member.getEmail()}</p>
+      <p>role: ${role}</p>
+`;
+    switch (role) {
+      case "Manager":
+        html += `<p>Office tel: ${member.getOfficeNumber()}</p>
+`;
+        break;
+      case "Engineer":
+        html += `<p>Office tel: ${member.getGithub()}</p>
+`;
+        break;
+      case "Intern":
+        html += `<p>Office tel: ${member.getSchool()}</p>
+`;
+        break;
+    }
+    html += `
+    </section>`;
+  });
+  return html;
+}
+
 function processTeam() {
-  console.log("processTeam");
-  team.forEach(member => console.log(member.getRole()));
+  const part1File = "./src/html1.html";
+  const part2File = "./src/html2.html";
+  const htmlFile = "index.html";
+  let htmlStr = "YEHAH ";
+
+  htmlStr = fs.readFileSync(part1File);
+  team.forEach(member => htmlStr += memberHtml(member));
+  // team.forEach(member => {
+  //   const role = member.getRole();
+  //   htmlStr += role;
+  //   switch (role) {
+  //     case "Manager":
+  //       htmlStr += member.getOfficeNumber();
+  //       break;
+  //     case "Engineer":
+  //       htmlStr += member.getGithub();
+  //       break;
+  //     case "Intern":
+  //       htmlStr += member.getSchool();
+  //       break;
+  //   }
+  //   htmlStr += member.getName();
+  //   htmlStr += member.getId();
+  //   htmlStr += member.getEmail();
+  // });
+  htmlStr += fs.readFileSync(part2File);
+  console.log(htmlStr);
+  fs.writeFile(htmlFile, htmlStr, (err) => {
+    if (err) throw err;
+  });
 }
 
 mainMenu();
-// console.log("After mainMenu");
-// processTeam();
