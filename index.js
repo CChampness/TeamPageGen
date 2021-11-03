@@ -10,7 +10,8 @@ const fs = require('fs');
 // const jest = require('jest');
 // const { getSystemErrorName } = require('util');
 
-// Collect all of the member of the team
+// Collect all of the members of the team
+// into an array of objects.
 const team = [];
 
 // Generic class that all employee types inherit from
@@ -191,6 +192,8 @@ const menuInputs = async (inputs = []) => {
 };
 
 const mainMenu = async () => {
+//  Add the welcome note
+// Add tests for throwing errors
   const inputs = await menuInputs();
   switch (inputs[0].empType) {
     case "Manager": 
@@ -208,33 +211,52 @@ const mainMenu = async () => {
 function memberHtml(member) {
   console.log("memberHtml");
   let html = "";
-  team.forEach(member => {
+  // team.forEach(member => {
     const role = member.getRole();
     // htmlStr += role;
     html += `
-    <section class="proj-card">
-      <p>Name: ${member.getName()}</p>
-      <p>Id: ${member.getId()}</p>
-      <p>email: ${member.getEmail()}</p>
-      <p>role: ${role}</p>
+      <section class="proj-card">
+        <table>
+        <tr>
+          <td>Name</td><td>${member.getName()}</td>
+        </tr>
+        <tr>
+          <td>Role</td><td>${role}</td>
+        </tr>
+        <tr>
+          <td>Employee Id</td><td>${member.getId()}</td>
+        </tr>
+        <tr>
+          <td>Email</td><td><a href="mailto:${member.getEmail()}">${member.getEmail()}</a></td>
+        </tr>
 `;
     switch (role) {
       case "Manager":
-        html += `<p>Office tel: ${member.getOfficeNumber()}</p>
+        html += `
+        <tr>
+          <td>Office number</td><td><a href="tel:${member.getOfficeNumber()}">${member.getOfficeNumber()}</a></td>
+        </tr>
 `;
         break;
       case "Engineer":
-        html += `<p>Office tel: ${member.getGithub()}</p>
+        html += `
+        <tr>
+          <td>GitHub</td><td><a href="${member.getGithub()}">NEED NEW TAB!!! ${member.getGithub()}</a></td>
+        </tr>
 `;
         break;
       case "Intern":
-        html += `<p>Office tel: ${member.getSchool()}</p>
+        html += `
+        <tr>
+          <td>School</td><td><a href="${member.getSchool()}"</a></td>
+        </tr>
 `;
         break;
     }
     html += `
-    </section>`;
-  });
+        </table>
+      </section>
+`;
   return html;
 }
 
@@ -244,28 +266,15 @@ function processTeam() {
   const htmlFile = "index.html";
   let htmlStr = "YEHAH ";
 
+  // Part 1 will be the top part of the html file.
   htmlStr = fs.readFileSync(part1File);
+
+  // The employee description cards go into
+  //  the middle of the html file.
   team.forEach(member => htmlStr += memberHtml(member));
-  // team.forEach(member => {
-  //   const role = member.getRole();
-  //   htmlStr += role;
-  //   switch (role) {
-  //     case "Manager":
-  //       htmlStr += member.getOfficeNumber();
-  //       break;
-  //     case "Engineer":
-  //       htmlStr += member.getGithub();
-  //       break;
-  //     case "Intern":
-  //       htmlStr += member.getSchool();
-  //       break;
-  //   }
-  //   htmlStr += member.getName();
-  //   htmlStr += member.getId();
-  //   htmlStr += member.getEmail();
-  // });
+
+  // Part 2 will be the bottom of the file.
   htmlStr += fs.readFileSync(part2File);
-  console.log(htmlStr);
   fs.writeFile(htmlFile, htmlStr, (err) => {
     if (err) throw err;
   });
