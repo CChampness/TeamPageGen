@@ -1,5 +1,6 @@
 const Engineer = require("../engineer.js");
 
+// Test the Engineer class, using jest
 describe("Engineer", () => {
     describe("Initialization", () => {
       it("should create an object with string properties 'name', 'id', 'email', and 'school'", () => {

@@ -1,5 +1,6 @@
 const Employee = require("../employee.js");
 
+// Test the Employee class, using jest
 describe("Employee", () => {
     describe("Initialization", () => {
       it("should create an object with 'name' string property, 'id' string property, and 'email' string property", () => {

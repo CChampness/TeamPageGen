@@ -2,7 +2,6 @@
   --bgcol: #3757a9;
   --light-border: #e0eae4;
   --dark-blue-green: #1b404e;
-  --pop-box-text: "Click inside the box for details";
 }
 
 * {
@@ -44,23 +43,6 @@ table {
   padding: 0rem 1rem 0rem 2rem;
 }
 
-article {
-  justify-content: center;
-  width: 96%;
-  margin: 2rem auto;
-  border: 1px solid var(--light-border);
-  border-radius: 5px;
-  transition: all 0.5s ease-in-out;
-}
-
-article div {
-  border: 1px solid var(--light-border);
-  border-radius: 5px;
-  margin: 2px;
-  line-height: 1.5rem;
-  padding: 0 5px;
-}
-
 main {
   justify-content: center;
   width: 96%;
@@ -85,14 +67,6 @@ main {
   justify-content: center;
 }
 
-/* img {
-  position: relative;
-  max-width: 100%;
-  margin: 2px;
-  border-radius: 5px;
-  z-index: -1;
-} */
-
 /* Mobile-first */
 .card-column {
   flex: 1 0 100%;
@@ -104,9 +78,10 @@ main {
 /* Make each proj card a flexbox column to align and justify content within it */
 .proj-card {
   display: flex;
+  background-color: darkslategray;
   flex-direction: column;
   justify-content: flex-start;
-  margin-top: 25px;
+  margin: 10px;
 
   /* Ridge outside of the box */
   outline:  8px ridge rgba(50, 144, 220, .6);
@@ -116,7 +91,7 @@ main {
 
 .proj-card a {
   text-decoration: none;
-  color: white;
+  color:cyan;
 }
 
 /* To even up the heights of the cards, make each one's block grow to the height of

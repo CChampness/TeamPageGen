@@ -7,7 +7,7 @@
 
 const inquirer = require('inquirer');
 const fs = require('fs');
-const Employee = require("./employee");
+// const Employee = require("./employee");
 const Manager = require("./manager");
 const Engineer = require("./engineer");
 const Intern = require("./intern");
@@ -16,67 +16,6 @@ const Intern = require("./intern");
 // into an array of objects.
 const team = [];
 
-// // Generic class that all employee types inherit from
-// class Employee {
-//   constructor(name, id, email) {
-//     this.name = name;
-//     this.id = id;
-//     this.email = email;
-//   }
-//   getName() {
-//     return this.name;
-//   }
-//   getId() {
-//     return this.id;
-//   }
-//   getEmail() {
-//     return this.email;
-//   }
-//   getRole() {
-//     return "Employee";
-//   }
-// }
-
-// class Manager extends Employee {
-//   constructor(name, id, email, officeNumber) {
-//     super(name, id, email);
-//     this.officeNumber = officeNumber;
-//     // console.log("new Manager,"+this.name);
-//   }
-//   getOfficeNumber() {
-//     return this.officeNumber;
-//   }
-//   getRole() {
-//     return "Manager";
-//   }
-// }
-
-// class Engineer extends Employee {
-//   constructor(name, id, email, github) {
-//     super(name, id, email);
-//     this.github = github;
-//   }
-//   getGithub() {
-//     return this.github;
-//   }
-//   getRole() {
-//     return "Engineer";
-//   }
-// }
-  
-// class Intern extends Employee {
-//   constructor(name, id, email, school) {
-//     super(name, id, email);
-//     this.school = school;
-//   }
-//   getSchool() {
-//     return this.school;
-//   }
-//   getRole() {
-//     return "Intern";
-//   }
-// }
-  
 // Array of questions for user input
 // Common to all employee types
 const employeeQuestions = [
@@ -111,6 +50,8 @@ function writeHTML(answers) {
     err ? console.log(err) : console.log(htmlFile+' has been written.'));
 }
 
+// Get the inputs for an intern, including all of the generic employee questions
+// plus the question that is unique to the intern role
 const internInputs = async (intInputs = []) => {
   const internQuestions = [{
     type: 'input',
@@ -124,7 +65,6 @@ const internInputs = async (intInputs = []) => {
 
 const getInternProfile = async () => {
   const intInputs = await internInputs();
-  console.log("getInternProfile: "+JSON.stringify(intInputs));
   team.push(new Intern(intInputs[0].empname, intInputs[0].id, intInputs[0].email, intInputs[0].school));
   if (intInputs[0].more.toUpperCase() === "Y") {
     mainMenu();
@@ -133,6 +73,8 @@ const getInternProfile = async () => {
   }
 };
 
+// Get the inputs for an engineer, including all of the generic employee questions
+// plus the question that is unique to the engineer role
 const engineerInputs = async (engInputs = []) => {
   const engineerQuestions = [{
     type: 'input',
@@ -146,7 +88,6 @@ const engineerInputs = async (engInputs = []) => {
 
 const getEngineerProfile = async () => {
   const engInputs = await engineerInputs();
-  console.log("getEngineerProfile: "+JSON.stringify(engInputs));
   team.push(new Engineer(engInputs[0].empname, engInputs[0].id, engInputs[0].email, engInputs[0].github));
   if (engInputs[0].more.toUpperCase() === "Y") {
     mainMenu();
@@ -155,6 +96,8 @@ const getEngineerProfile = async () => {
   }
 };
 
+// Get the inputs for a manager, including all of the generic employee questions
+// plus the question that is unique to the manager role
 const managerInputs = async (mgrInputs = []) => {
   const managerQuestions = [   {
     type: 'input',
@@ -168,8 +111,6 @@ const managerInputs = async (mgrInputs = []) => {
 
 const getManagerProfile = async () => {
   const mgrInputs = await managerInputs();
-  console.log("getManagerProfile: "+JSON.stringify(mgrInputs));
-  // console.log("manager's name: "+mgrInputs[0].empname);
   team.push(new Manager(mgrInputs[0].empname, mgrInputs[0].id, mgrInputs[0].email, mgrInputs[0].officeNumber));
   if (mgrInputs[0].more.toUpperCase() === "Y") {
     mainMenu();
@@ -194,8 +135,6 @@ const menuInputs = async (inputs = []) => {
 };
 
 const mainMenu = async () => {
-//  Add the welcome note
-// Add tests for throwing errors
   const inputs = await menuInputs();
   switch (inputs[0].empType) {
     case "Manager": 
@@ -211,12 +150,10 @@ const mainMenu = async () => {
 };
 
 function memberHtml(member) {
-  console.log("memberHtml");
   let html = "";
-  // team.forEach(member => {
-    const role = member.getRole();
-    // htmlStr += role;
-    html += `
+  const role = member.getRole();
+  html += `
+    <div class="card-column">
       <section class="proj-card">
         <table>
         <tr>
@@ -232,32 +169,33 @@ function memberHtml(member) {
           <td>Email</td><td><a href="mailto:${member.getEmail()}">${member.getEmail()}</a></td>
         </tr>
 `;
-    switch (role) {
-      case "Manager":
-        html += `
+  switch (role) {
+    case "Manager":
+      html += `
         <tr>
           <td>Office number</td><td><a href="tel:${member.getOfficeNumber()}">${member.getOfficeNumber()}</a></td>
         </tr>
 `;
-        break;
-      case "Engineer":
-        html += `
+      break;
+    case "Engineer":
+      html += `
         <tr>
-          <td>GitHub</td><td><a href="${member.getGithub()}">NEED NEW TAB!!! ${member.getGithub()}</a></td>
+          <td>GitHub</td><td><a href="${member.getGithub()}" target="_blank">${member.getGithub()}</a></td>
         </tr>
 `;
-        break;
-      case "Intern":
-        html += `
+      break;
+    case "Intern":
+      html += `
         <tr>
-          <td>School</td><td><a href="${member.getSchool()}"</a></td>
+          <td>School</td><td>${member.getSchool()}</td>
         </tr>
 `;
-        break;
-    }
-    html += `
+      break;
+  }
+  html += `
         </table>
       </section>
+      </div>
 `;
   return html;
 }
@@ -266,10 +204,9 @@ function processTeam() {
   const part1File = "./src/html1.html";
   const part2File = "./src/html2.html";
   const htmlFile = "index.html";
-  let htmlStr = "YEHAH ";
 
   // Part 1 will be the top part of the html file.
-  htmlStr = fs.readFileSync(part1File);
+  let htmlStr = fs.readFileSync(part1File);
 
   // The employee description cards go into
   //  the middle of the html file.

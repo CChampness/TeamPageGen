@@ -1,5 +1,6 @@
 const Manager = require("../manager.js");
 
+//Test the Manager class, using jest
 describe("Manager", () => {
     describe("Initialization", () => {
       it("should create an object with string properties 'name', 'id', 'email', and 'officeNumber'", () => {

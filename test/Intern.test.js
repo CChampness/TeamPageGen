@@ -1,5 +1,6 @@
 const Intern = require("../intern.js");
 
+// Test the Intern class, using jest
 describe("Intern", () => {
     describe("Initialization", () => {
       it("should create an object with string properties'name', 'id', 'email', and 'school'", () => {
