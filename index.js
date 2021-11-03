@@ -7,73 +7,75 @@
 
 const inquirer = require('inquirer');
 const fs = require('fs');
-// const jest = require('jest');
-// const { getSystemErrorName } = require('util');
+const Employee = require("./employee");
+const Manager = require("./manager");
+const Engineer = require("./engineer");
+const Intern = require("./intern");
 
 // Collect all of the members of the team
 // into an array of objects.
 const team = [];
 
-// Generic class that all employee types inherit from
-class Employee {
-  constructor(name, id, email) {
-    this.name = name;
-    this.id = id;
-    this.email = email;
-  }
-  getName() {
-    return this.name;
-  }
-  getId() {
-    return this.id;
-  }
-  getEmail() {
-    return this.email;
-  }
-  getRole() {
-    return "Employee";
-  }
-}
+// // Generic class that all employee types inherit from
+// class Employee {
+//   constructor(name, id, email) {
+//     this.name = name;
+//     this.id = id;
+//     this.email = email;
+//   }
+//   getName() {
+//     return this.name;
+//   }
+//   getId() {
+//     return this.id;
+//   }
+//   getEmail() {
+//     return this.email;
+//   }
+//   getRole() {
+//     return "Employee";
+//   }
+// }
 
-class Manager extends Employee {
-  constructor(name, id, email, officeNumber) {
-    super(name, id, email);
-    this.officeNumber = officeNumber;
-    // console.log("new Manager,"+this.name);
-  }
-  getOfficeNumber() {
-    return this.officeNumber;
-  }
-  getRole() {
-    return "Manager";
-  }
-}
+// class Manager extends Employee {
+//   constructor(name, id, email, officeNumber) {
+//     super(name, id, email);
+//     this.officeNumber = officeNumber;
+//     // console.log("new Manager,"+this.name);
+//   }
+//   getOfficeNumber() {
+//     return this.officeNumber;
+//   }
+//   getRole() {
+//     return "Manager";
+//   }
+// }
 
-class Engineer extends Employee {
-  constructor(name, id, email, github) {
-    super(name, id, email);
-    this.github = github;
-  }
-  getGithub() {
-    return this.github;
-  }
-  getRole() {
-    return "Engineer";
-  }
-}
+// class Engineer extends Employee {
+//   constructor(name, id, email, github) {
+//     super(name, id, email);
+//     this.github = github;
+//   }
+//   getGithub() {
+//     return this.github;
+//   }
+//   getRole() {
+//     return "Engineer";
+//   }
+// }
   
-class Intern extends Employee {
-  constructor(name, id, email, school) {
-    super(name, id, email);
-    this.school = school;
-  }
-  getSchool() {
-    return this.school;
-  }
-  getRole() {
-    return "Intern";
-  }
-}
+// class Intern extends Employee {
+//   constructor(name, id, email, school) {
+//     super(name, id, email);
+//     this.school = school;
+//   }
+//   getSchool() {
+//     return this.school;
+//   }
+//   getRole() {
+//     return "Intern";
+//   }
+// }
   
 // Array of questions for user input
 // Common to all employee types
@@ -281,3 +283,5 @@ function processTeam() {
 }
 
 mainMenu();
+
+// module.exports = { Employee, Intern, Engineer, Manager };

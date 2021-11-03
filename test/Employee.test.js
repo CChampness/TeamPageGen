@@ -1,9 +1,9 @@
-const Employee = require("../index.js");
+const Employee = require("../employee.js");
 
 describe("Employee", () => {
     describe("Initialization", () => {
       it("should create an object with 'name' string property, 'id' string property, and 'email' string property", () => {
-        const employee = new Employee("Bob", 1, "Bob@junkmail.com");
+        const employee = new Employee("Bob", "1", "Bob@junkmail.com");
  
         // Verify that the new object has the correct properties
         expect(employee).toEqual({ name: "Bob", id: "1", email: "Bob@junkmail.com" });
@@ -13,7 +13,7 @@ describe("Employee", () => {
     describe("getName", () => {
       it("should be the employee's name as a string", () => {
         // Create new object to test with
-        const employee = new Employee("Bob", 1, "Bob@junkmail.com");
+        const employee = new Employee("Bob", "1", "Bob@junkmail.com");
     
         // Verify that the name was added to the object
         expect(employee.getName()).toEqual("Bob");
